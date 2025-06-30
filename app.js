@@ -1,11 +1,12 @@
 // backend/app.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const mysql = require('mysql2');
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -14,10 +15,10 @@ app.use(morgan('dev'));
 
 // Koneksi ke MySQL
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',      // Ganti sesuai user MySQL kamu
-  password: '',      // Ganti sesuai password
-  database: 'web_pribadi'  // Ganti sesuai nama database kamu
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
 });
 
 db.connect((err) => {
@@ -63,27 +64,26 @@ app.get('/api/berita', (req, res) => {
   ]);
 });
 
-// Galeri endpoint
+// Galeri
 app.get('/api/galeri', (req, res) => {
-    res.json([
-        {
-            image: '/assets/images/frontend.jpg',
-            caption: 'Frontend Development',
-            description: 'Membangun antarmuka pengguna menggunakan React JS dan teknologi modern.'
-        },
-        {
-            image: '/assets/images/backend.jpg',
-            caption: 'Backend Development',
-            description: 'Mengembangkan API menggunakan Node.js dan Express untuk komunikasi data.'
-        }
-    ]);
+  res.json([
+    {
+      image: '/assets/images/frontend.jpg',
+      caption: 'Frontend Development',
+      description: 'Membangun antarmuka pengguna menggunakan React JS dan teknologi modern.'
+    },
+    {
+      image: '/assets/images/backend.jpg',
+      caption: 'Backend Development',
+      description: 'Mengembangkan API menggunakan Node.js dan Express untuk komunikasi data.'
+    }
+  ]);
 });
-
 
 // Kontak Info
 app.get('/api/kontak', (req, res) => {
   res.json({
-    phone: "+6285729670954", 
+    phone: "+6285729670954",
   });
 });
 
